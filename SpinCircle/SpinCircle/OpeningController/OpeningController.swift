@@ -10,36 +10,35 @@ import UIKit
 
 class OpeningController: UIViewController {
     
-    let myCircle = CategoryCircle()
     let mySemiCircle = MySemiCircle()
-    let myLabel = MyLabel()
+    
+    
+    let myLabel: MyLabel = {
+       let myLabel = MyLabel()
+        myLabel.text = "Pizza"
+        myLabel.textColor = .white
+        return myLabel
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
         
-        myLabel.text = "Pizza"
-        myLabel.textColor = .white
         
-        [myCircle, mySemiCircle, myLabel].forEach{view.addSubview($0)}
+        
+        [mySemiCircle, myLabel].forEach{view.addSubview($0)}
         mySemiCircle.anchor(size: CGSize(width: 300, height: 300))
         mySemiCircle.backgroundColor = .clear   //Otherwise Rectangle area not filled by Bezier is .Black
-        myCircle.backgroundColor = .clear
         myLabel.backgroundColor = .clear
         
         myLabel.anchor(size: CGSize(width: 300, height: 300))
-//        myLabel.backgroundColor = .white   //Otherwise Rectangle area not filled by Bezier is .Black
-        
-        
-        
         
         
         NSLayoutConstraint.activate([
             mySemiCircle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             mySemiCircle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-//            myLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            myLabel.topAnchor.constraint(equalTo: mySemiCircle.bottomAnchor, constant: 10),
             myLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             myLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             ])
