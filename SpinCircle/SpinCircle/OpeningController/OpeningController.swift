@@ -20,14 +20,49 @@ class OpeningController: UIViewController {
         [mySemiCircle].forEach{view.addSubview($0)}
         mySemiCircle.anchor(size: CGSize(width: 350, height: 350))
         mySemiCircle.backgroundColor = .clear   //Otherwise Rectangle area not filled by Bezier is .Black
-
-        
         
         NSLayoutConstraint.activate([
             mySemiCircle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             mySemiCircle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             ])
+        
+        
+        setupNavigationMenu()
+        
+        
     }
+    
+    
+    func setupNavigationMenu(){
+        navigationItem.title = "Spin Wheel"
+        navigationController?.navigationBar.barTintColor = .skyBlue4
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "SPIN", style: .done, target: self, action: #selector(handleSpin))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "STOP", style: .done, target: self, action: #selector(stopRotating))
+    }
+    
+    
+    @objc func handleSpin(){
+        if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) == nil {
+            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+            rotationAnimation.fromValue = 0.0
+            rotationAnimation.toValue = Float(Float.pi * 2.0)
+            rotationAnimation.duration = 3.0
+            rotationAnimation.repeatCount = Float.infinity
+            mySemiCircle.layer.add(rotationAnimation, forKey: kRotationAnimationKey)
+        }
+    }
+    
+    @objc func stopRotating(view: UIView) {
+        //        UIViewPropertyAnimator(duration: 2, dampingRatio: 0.4) {
+        //            print("Slowing down animation")
+        //        }
+        
+        if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) != nil {
+              mySemiCircle.layer.removeAnimation(forKey: kRotationAnimationKey)
+        }
+    }
+    
+    let kRotationAnimationKey = "com.myapplication.rotationanimationkey" // Any key
 }
 
 
