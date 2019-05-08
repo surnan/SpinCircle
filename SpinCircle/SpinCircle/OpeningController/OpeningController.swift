@@ -14,9 +14,15 @@ class OpeningController: UIViewController {
     
     let mySemiCircle = MySemiCircle()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        setupNavigationMenu()
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        mySemiCircle.addGestureRecognizer(panGesture)
+        
         [mySemiCircle].forEach{view.addSubview($0)}
         mySemiCircle.anchor(size: CGSize(width: 350, height: 350))
         mySemiCircle.backgroundColor = .clear   //Otherwise Rectangle area not filled by Bezier is .Black
@@ -25,14 +31,20 @@ class OpeningController: UIViewController {
             mySemiCircle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             mySemiCircle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             ])
-        
-        
-        setupNavigationMenu()
-        
-        
     }
     
-    
+    @objc func handlePan(_ sender: UIPanGestureRecognizer){
+        let velocity = sender.velocity(in: view)
+        let x = velocity.x
+        let y = velocity.y
+        let speed = x * x * y * y
+        let root = speed.squareRoot()
+        let rootInt = Int(root)
+        let up = y > 0 ? false : true
+        print("velocity ==> \(rootInt) .... up = \(up)")
+    }
+
+
     func setupNavigationMenu(){
         navigationItem.title = "Spin Wheel"
         navigationController?.navigationBar.barTintColor = .skyBlue4
@@ -53,10 +65,6 @@ class OpeningController: UIViewController {
     }
     
     @objc func stopRotating(view: UIView) {
-        //        UIViewPropertyAnimator(duration: 2, dampingRatio: 0.4) {
-        //            print("Slowing down animation")
-        //        }
-        
         if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) != nil {
               mySemiCircle.layer.removeAnimation(forKey: kRotationAnimationKey)
         }
