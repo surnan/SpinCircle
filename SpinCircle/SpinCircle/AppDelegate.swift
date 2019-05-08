@@ -8,6 +8,13 @@
 
 import UIKit
 
+
+let colorArray: [UIColor] = [.blue, .red, .orange, .purple, .paleGreen, .grey196,
+                             .solidOrange, .lemonChiffon, .ghostWhite, .greyOrange,
+                             .darkOrange, .white, .lightRed, .grey227, .plum, .dodgerBlue4,
+                             .tan, .teal, .skyBlue4, .brown, .cyan, .green, .magenta, .yellow]
+
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -19,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow()
         window?.makeKeyAndVisible()
-        window?.rootViewController = OpeningController()
+        window?.rootViewController = OpeningController2()
         
         
         return true
