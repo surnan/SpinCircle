@@ -8,9 +8,9 @@
 
 import UIKit
 
-let sectionCount = 24
+let sectionCount = 9
 
-class OpeningController2: UIViewController {
+class OpeningController: UIViewController {
     
     let mySemiCircle = MySemiCircle()
     
@@ -32,7 +32,7 @@ class OpeningController2: UIViewController {
 
 
 
-
+var wordArray = ["apple", "banana", "cherry", "dog", "echo", "food", "girl", "hero", "ice"]
 
 
 
@@ -50,16 +50,6 @@ class MySemiCircle: UIView {
             colorArray[i % colorArray.count].setFill()
             path.addLine(to: center)
             path.fill()
-            print("i = \(i)  ..... start Angle: \(j * angle)  ...... end angle: \(angle * (1 + j))")
         }
     }
 }
-
-
-/*
- let path = UIBezierPath(arcCenter: center, radius: radius, startAngle: .pi, endAngle: 3 * .pi / 2, clockwise: true)
- path.lineWidth = 5
- path.addLine(to: center)
- UIColor.green.setFill()
- path.fill()
-*/
