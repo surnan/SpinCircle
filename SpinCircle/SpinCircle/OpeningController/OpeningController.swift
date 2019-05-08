@@ -19,7 +19,7 @@ class OpeningController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavigationMenu()
-        
+    
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         mySemiCircle.addGestureRecognizer(panGesture)
         
@@ -32,9 +32,10 @@ class OpeningController: UIViewController {
             mySemiCircle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             ])
     }
+
     
-    
-    
+    var finalVelocity = 0
+    var currentlyPan = false
     
     @objc func handlePan(_ sender: UIPanGestureRecognizer){
         let velocity = sender.velocity(in: view)
@@ -44,9 +45,19 @@ class OpeningController: UIViewController {
         let root = speed.squareRoot()
         let rootInt = Int(root)
         let up = y > 0 ? false : true
-        print("velocity ==> \(rootInt) .... up = \(up)")
-        finalVelocity = rootInt
-        spin()
+        print("\n\nvelocity ==> \(rootInt) .... up = \(up)")
+        
+        let timestamp = NSDate().timeIntervalSince1970
+        print("....... Date = \(Date())  .... TimeStamp = \(timestamp)")
+        
+        currentlyPan = true
+        
+        
+        if sender.state == UIGestureRecognizer.State.ended {
+            print("-- FIRE AWAY --")
+            finalVelocity = rootInt
+            spin()
+        }
     }
     
     
@@ -57,13 +68,11 @@ class OpeningController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "STOP", style: .done, target: self, action: #selector(stopRotating))
     }
     
-    var finalVelocity = 0
+    
     
     func spin(){
-        
         let divisionConst = 25000
         let newLimit: Float = Float(finalVelocity) / Float(divisionConst)
-        
         UIView.animate(withDuration: Double(newLimit),
                        delay: 0,
                        usingSpringWithDamping: 1.0,
@@ -80,37 +89,6 @@ class OpeningController: UIViewController {
                        completion: { (_) in
                         print("Animation Ended")
         })
-        
-        
-        /*
-         UIView.animate(withDuration: 10,
-         delay: 0,
-         usingSpringWithDamping: 1.0,
-         initialSpringVelocity: 0,
-         options: .curveEaseOut,
-         animations: {
-         if self.mySemiCircle.layer.animation(forKey: self.kRotationAnimationKey) == nil {
-         let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
-         rotationAnimation.fromValue = 0.0
-         rotationAnimation.toValue = Float(Float.pi * 2.0)
-         self.mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
-         }
-         },
-         completion: { (_) in
-         print("Animation Ended")
-         })
-         */
-        
-        
-        
-        //        if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) == nil {
-        //            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
-        //            rotationAnimation.fromValue = 0.0
-        //            rotationAnimation.toValue = Float(Float.pi * 2.0)
-        //            rotationAnimation.duration = 3.0
-        //            rotationAnimation.repeatCount = Float.infinity
-        //            mySemiCircle.layer.add(rotationAnimation, forKey: kRotationAnimationKey)
-        //        }
     }
     
     @objc func handleSpin(){
@@ -149,3 +127,38 @@ class MySemiCircle: UIView {
         }
     }
 }
+
+
+/*
+ 
+ 
+ /*
+ UIView.animate(withDuration: 10,
+ delay: 0,
+ usingSpringWithDamping: 1.0,
+ initialSpringVelocity: 0,
+ options: .curveEaseOut,
+ animations: {
+ if self.mySemiCircle.layer.animation(forKey: self.kRotationAnimationKey) == nil {
+ let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+ rotationAnimation.fromValue = 0.0
+ rotationAnimation.toValue = Float(Float.pi * 2.0)
+ self.mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
+ }
+ },
+ completion: { (_) in
+ print("Animation Ended")
+ })
+ */
+ 
+ 
+ 
+ //        if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) == nil {
+ //            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+ //            rotationAnimation.fromValue = 0.0
+ //            rotationAnimation.toValue = Float(Float.pi * 2.0)
+ //            rotationAnimation.duration = 3.0
+ //            rotationAnimation.repeatCount = Float.infinity
+ //            mySemiCircle.layer.add(rotationAnimation, forKey: kRotationAnimationKey)
+ //        }
+ */
