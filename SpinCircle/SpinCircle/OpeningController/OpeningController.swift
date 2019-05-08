@@ -36,6 +36,7 @@ class OpeningController: UIViewController {
     
     var finalVelocity = 0
     var currentlyPan = false
+    var clockWise = 1
     
     @objc func handlePan(_ sender: UIPanGestureRecognizer){
         let velocity = sender.velocity(in: view)
@@ -47,6 +48,11 @@ class OpeningController: UIViewController {
         let up = y > 0 ? false : true
         print("\n\nvelocity ==> \(rootInt) .... up = \(up)")
         
+        
+
+
+        
+        
         let timestamp = NSDate().timeIntervalSince1970
         print("....... Date = \(Date())  .... TimeStamp = \(timestamp)")
         
@@ -55,6 +61,11 @@ class OpeningController: UIViewController {
         
         if sender.state == UIGestureRecognizer.State.ended {
             print("-- FIRE AWAY --")
+            if abs(x) >= abs(y) {
+                clockWise = x > 0 ? 1 : -1
+            } else {
+                clockWise = y > 0 ? 1 : -1
+            }
             finalVelocity = rootInt
             spin()
         }
@@ -82,7 +93,8 @@ class OpeningController: UIViewController {
                         if self.mySemiCircle.layer.animation(forKey: self.kRotationAnimationKey) == nil {
                             let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
                             rotationAnimation.fromValue = 0.0
-                            rotationAnimation.toValue = Float(Float.pi * newLimit)
+                            rotationAnimation.toValue = Float(Float.pi * newLimit * Float(self.clockWise))
+                            print("FINAL VALUE = \(Float.pi * newLimit * Float(self.clockWise))")
                             self.mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
                         }
         },
