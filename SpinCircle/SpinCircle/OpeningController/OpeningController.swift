@@ -33,6 +33,9 @@ class OpeningController: UIViewController {
             ])
     }
     
+    
+    var finalVelocity = 0
+    
     @objc func handlePan(_ sender: UIPanGestureRecognizer){
         let velocity = sender.velocity(in: view)
         let x = velocity.x
@@ -42,6 +45,8 @@ class OpeningController: UIViewController {
         let rootInt = Int(root)
         let up = y > 0 ? false : true
         print("velocity ==> \(rootInt) .... up = \(up)")
+        finalVelocity = rootInt
+        spin()
     }
 
 
@@ -53,7 +58,7 @@ class OpeningController: UIViewController {
     }
     
     
-    @objc func handleSpin(){
+    func spin(){
         if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) == nil {
             let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
             rotationAnimation.fromValue = 0.0
@@ -62,6 +67,10 @@ class OpeningController: UIViewController {
             rotationAnimation.repeatCount = Float.infinity
             mySemiCircle.layer.add(rotationAnimation, forKey: kRotationAnimationKey)
         }
+    }
+    
+    @objc func handleSpin(){
+        spin()
     }
     
     @objc func stopRotating(view: UIView) {
