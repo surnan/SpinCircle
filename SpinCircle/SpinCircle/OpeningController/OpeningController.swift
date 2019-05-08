@@ -48,8 +48,8 @@ class OpeningController: UIViewController {
         finalVelocity = rootInt
         spin()
     }
-
-
+    
+    
     func setupNavigationMenu(){
         navigationItem.title = "Spin Wheel"
         navigationController?.navigationBar.barTintColor = .skyBlue4
@@ -60,30 +60,57 @@ class OpeningController: UIViewController {
     var finalVelocity = 0
     
     func spin(){
-        UIView.animate(withDuration: 5,
+        
+        let divisionConst = 25000
+        let newLimit: Float = Float(finalVelocity) / Float(divisionConst)
+        
+        UIView.animate(withDuration: Double(newLimit),
                        delay: 0,
-                       usingSpringWithDamping: 0.5,
-                       initialSpringVelocity: 5,
+                       usingSpringWithDamping: 1.0,
+                       initialSpringVelocity: 0,
                        options: .curveEaseOut,
                        animations: {
                         if self.mySemiCircle.layer.animation(forKey: self.kRotationAnimationKey) == nil {
                             let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
                             rotationAnimation.fromValue = 0.0
-                            rotationAnimation.toValue = Float(Float.pi * 2.0)
+                            rotationAnimation.toValue = Float(Float.pi * newLimit)
                             self.mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
                         }
         },
                        completion: { (_) in
                         print("Animation Ended")
         })
-//        if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) == nil {
-//            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
-//            rotationAnimation.fromValue = 0.0
-//            rotationAnimation.toValue = Float(Float.pi * 2.0)
-//            rotationAnimation.duration = 3.0
-//            rotationAnimation.repeatCount = Float.infinity
-//            mySemiCircle.layer.add(rotationAnimation, forKey: kRotationAnimationKey)
-//        }
+        
+        
+        /*
+         UIView.animate(withDuration: 10,
+         delay: 0,
+         usingSpringWithDamping: 1.0,
+         initialSpringVelocity: 0,
+         options: .curveEaseOut,
+         animations: {
+         if self.mySemiCircle.layer.animation(forKey: self.kRotationAnimationKey) == nil {
+         let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+         rotationAnimation.fromValue = 0.0
+         rotationAnimation.toValue = Float(Float.pi * 2.0)
+         self.mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
+         }
+         },
+         completion: { (_) in
+         print("Animation Ended")
+         })
+         */
+        
+        
+        
+        //        if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) == nil {
+        //            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        //            rotationAnimation.fromValue = 0.0
+        //            rotationAnimation.toValue = Float(Float.pi * 2.0)
+        //            rotationAnimation.duration = 3.0
+        //            rotationAnimation.repeatCount = Float.infinity
+        //            mySemiCircle.layer.add(rotationAnimation, forKey: kRotationAnimationKey)
+        //        }
     }
     
     @objc func handleSpin(){
@@ -92,7 +119,7 @@ class OpeningController: UIViewController {
     
     @objc func stopRotating(view: UIView) {
         if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) != nil {
-              mySemiCircle.layer.removeAnimation(forKey: kRotationAnimationKey)
+            mySemiCircle.layer.removeAnimation(forKey: kRotationAnimationKey)
         }
     }
     
