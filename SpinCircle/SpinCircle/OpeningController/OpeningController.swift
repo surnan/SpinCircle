@@ -13,13 +13,30 @@ let sectionCount = 9
 class OpeningController: UIViewController {
     
     let mySemiCircle = MySemiCircle()
+    let viewForPan = UIView()
+    
+    let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationMenu()
+        
         view.backgroundColor = .white
-        [mySemiCircle].forEach{view.addSubview($0)}
+        [mySemiCircle, viewForPan].forEach{view.addSubview($0)}
         mySemiCircle.anchor(size: CGSize(width: 350, height: 350))
         mySemiCircle.backgroundColor = .clear   //Otherwise Rectangle area not filled by Bezier is .Black
+
+
+        mySemiCircle.isUserInteractionEnabled = true
+        view.isUserInteractionEnabled = true
+    
+        view.addGestureRecognizer(panGesture)
+        view.addGestureRecognizer(tapGesture)
+        
+        mySemiCircle.addGestureRecognizer(panGesture)
+        mySemiCircle.addGestureRecognizer(tapGesture)
         
         NSLayoutConstraint.activate([
             mySemiCircle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -27,9 +44,21 @@ class OpeningController: UIViewController {
             ])
         
         
-        setupNavigationMenu()
         
         
+        
+    }
+    
+    
+    
+    @objc func handlePanGesture(_ sender: UIPanGestureRecognizer){
+        print("")
+    }
+    
+    
+    
+    @objc func handleTapGesture(_ sender: UITapGestureRecognizer){
+        print("TAPPED")
     }
     
     
@@ -40,32 +69,54 @@ class OpeningController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "STOP", style: .done, target: self, action: #selector(stopRotating))
     }
     
+    func randomNumber()->Float {
+        let random = Float.random(in: 2 ..< 10)
+        return random
+    }
     
     @objc func handleSpin(){
-        if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) == nil {
-            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
-            rotationAnimation.fromValue = 0.0
-            rotationAnimation.toValue = Float(Float.pi * 2.0)
-            rotationAnimation.duration = 3.0
-            rotationAnimation.repeatCount = Float.infinity
-            mySemiCircle.layer.add(rotationAnimation, forKey: kRotationAnimationKey)
-        }
+        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotationAnimation.fromValue = 0.0
+        rotationAnimation.toValue = Float(Float.pi * 2.0 * randomNumber())
+//        rotationAnimation.duration = 10.0  //How long to reach 'rotation.toValue'
+        rotationAnimation.speed = 0.05
+        self.mySemiCircle.layer.add(rotationAnimation, forKey: kRotationAnimationKey)
+        
+//        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+//            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+//            rotationAnimation.fromValue = 0.0
+//            rotationAnimation.toValue = Float(Float.pi * 2.0 * 10)
+//            rotationAnimation.duration = 10.0
+//            self.mySemiCircle.layer.add(rotationAnimation, forKey: kRotationAnimationKey)
+//        }, completion: nil)
+        
+        
+        
     }
     
     @objc func stopRotating(view: UIView) {
-        //        UIViewPropertyAnimator(duration: 2, dampingRatio: 0.4) {
-        //            print("Slowing down animation")
-        //        }
+
         
-        if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) != nil {
-              mySemiCircle.layer.removeAnimation(forKey: kRotationAnimationKey)
-        }
+//        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
+//            self.mySemiCircle.layer.timeOffset = self.mySemiCircle.layer.convertTime(CACurrentMediaTime(), from: nil)
+//            if self.mySemiCircle.layer.speed == 0 { timer.invalidate() }
+//            self.mySemiCircle.layer.beginTime = CACurrentMediaTime()
+//            self.mySemiCircle.layer.speed -= 0.5
+//
+//        }
+//        timer.fire()
+        
+        
+        
+        
+//        if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) != nil {
+//              mySemiCircle.layer.removeAnimation(forKey: kRotationAnimationKey)
+//        }
     }
-    
-    let kRotationAnimationKey = "com.myapplication.rotationanimationkey" // Any key
 }
 
 
+let kRotationAnimationKey = "com.myapplication.rotationanimationkey" // Any key
 
 var wordArray = ["apple", "banana", "cherry", "dog", "echo", "food", "girl", "hero", "ice"]
 
