@@ -19,9 +19,4 @@ import UIKit
         path.fill()
         path.stroke()
     }
-    
-    
-    
-    
-    
 }
