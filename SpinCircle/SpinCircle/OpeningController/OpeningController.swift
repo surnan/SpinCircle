@@ -34,7 +34,7 @@ class OpeningController: UIViewController {
     }
     
     
-    var finalVelocity = 0
+    
     
     @objc func handlePan(_ sender: UIPanGestureRecognizer){
         let velocity = sender.velocity(in: view)
@@ -57,16 +57,33 @@ class OpeningController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "STOP", style: .done, target: self, action: #selector(stopRotating))
     }
     
+    var finalVelocity = 0
     
     func spin(){
-        if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) == nil {
-            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
-            rotationAnimation.fromValue = 0.0
-            rotationAnimation.toValue = Float(Float.pi * 2.0)
-            rotationAnimation.duration = 3.0
-            rotationAnimation.repeatCount = Float.infinity
-            mySemiCircle.layer.add(rotationAnimation, forKey: kRotationAnimationKey)
-        }
+        UIView.animate(withDuration: 5,
+                       delay: 0,
+                       usingSpringWithDamping: 0.5,
+                       initialSpringVelocity: 5,
+                       options: .curveEaseOut,
+                       animations: {
+                        if self.mySemiCircle.layer.animation(forKey: self.kRotationAnimationKey) == nil {
+                            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+                            rotationAnimation.fromValue = 0.0
+                            rotationAnimation.toValue = Float(Float.pi * 2.0)
+                            self.mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
+                        }
+        },
+                       completion: { (_) in
+                        print("Animation Ended")
+        })
+//        if mySemiCircle.layer.animation(forKey: kRotationAnimationKey) == nil {
+//            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+//            rotationAnimation.fromValue = 0.0
+//            rotationAnimation.toValue = Float(Float.pi * 2.0)
+//            rotationAnimation.duration = 3.0
+//            rotationAnimation.repeatCount = Float.infinity
+//            mySemiCircle.layer.add(rotationAnimation, forKey: kRotationAnimationKey)
+//        }
     }
     
     @objc func handleSpin(){
