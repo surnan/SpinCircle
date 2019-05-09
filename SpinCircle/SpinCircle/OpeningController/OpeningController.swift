@@ -44,12 +44,10 @@ class OpeningController: UIViewController {
         let speed = x * x * y * y
         let root = speed.squareRoot()
         let rootInt = Int(root)
-        let up = y > 0 ? false : true
-        print("\n\nvelocity ==> \(rootInt) .... up = \(up)")
-        
-        let timestamp = NSDate().timeIntervalSince1970
-        print("....... Date = \(Date())  .... TimeStamp = \(timestamp)")
-        
+//        let up = y > 0 ? false : true
+//        print("\n\nvelocity ==> \(rootInt) .... up = \(up)")
+//        let timestamp = NSDate().timeIntervalSince1970
+//        print("....... Date = \(Date())  .... TimeStamp = \(timestamp)")
         currentlyPan = true
         
         
@@ -71,13 +69,26 @@ class OpeningController: UIViewController {
     
     
     func spin(){
+
+        CATransaction.begin()
+
+        
+        CATransaction.setCompletionBlock({
+            print("Transaction completed")
+        })
         let divisionConst = 25000
         let newLimit: Float = Float(finalVelocity) / Float(divisionConst)
         
         let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotationAnimation.fromValue = 0.0
         rotationAnimation.toValue = Float(Float.pi * newLimit)
+        rotationAnimation.duration = 3
+        
+        rotationAnimation.fillMode = CAMediaTimingFillMode.forwards
+        rotationAnimation.isRemovedOnCompletion = false
+        
         self.mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
+        CATransaction.commit()
     }
     
     @objc func handleSpin(){
