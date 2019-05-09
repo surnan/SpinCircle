@@ -84,10 +84,14 @@ class OpeningController: UIViewController {
         rotationAnimation.toValue = Float(Float.pi * newLimit)
         rotationAnimation.duration = 3
         
+        rotationAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        
         rotationAnimation.fillMode = CAMediaTimingFillMode.forwards
         rotationAnimation.isRemovedOnCompletion = false
         
-        self.mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
+        
+        mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
+//        mySemiCircle.layer.transform = CATransform3DMakeRotation(M_PI, <#CGFloat#>, <#CGFloat#>, <#CGFloat#>)
         CATransaction.commit()
     }
     
