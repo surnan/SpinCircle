@@ -36,6 +36,7 @@ class OpeningController: UIViewController {
     
     var finalVelocity = 0
     var currentlyPan = false
+    var clockwise: Float = 1.0
     
     @objc func handlePan(_ sender: UIPanGestureRecognizer){
         let velocity = sender.velocity(in: view)
@@ -44,11 +45,16 @@ class OpeningController: UIViewController {
         let speed = x * x * y * y
         let root = speed.squareRoot()
         let rootInt = Int(root)
-//        let up = y > 0 ? false : true
-//        print("\n\nvelocity ==> \(rootInt) .... up = \(up)")
-//        let timestamp = NSDate().timeIntervalSince1970
-//        print("....... Date = \(Date())  .... TimeStamp = \(timestamp)")
         currentlyPan = true
+
+        
+        if abs(x) > abs(y) {
+            clockwise = x > 0 ? -1 : 1
+        } else {
+            clockwise = y < 0 ? 1 : -1
+        }
+        
+        
         
         
         if sender.state == UIGestureRecognizer.State.ended {
@@ -76,22 +82,20 @@ class OpeningController: UIViewController {
         CATransaction.setCompletionBlock({
             print("Transaction completed")
         })
-        let divisionConst = 25000
+        let divisionConst = 250000
         let newLimit: Float = Float(finalVelocity) / Float(divisionConst)
         
         let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
         rotationAnimation.fromValue = 0.0
-        rotationAnimation.toValue = Float(Float.pi * newLimit)
-        rotationAnimation.duration = 3
+        rotationAnimation.toValue = Float(Float.pi * newLimit * clockwise)
+        rotationAnimation.duration = 1
         
         rotationAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
         
         rotationAnimation.fillMode = CAMediaTimingFillMode.forwards
         rotationAnimation.isRemovedOnCompletion = false
         
-        
         mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
-//        mySemiCircle.layer.transform = CATransform3DMakeRotation(M_PI, <#CGFloat#>, <#CGFloat#>, <#CGFloat#>)
         CATransaction.commit()
     }
     
