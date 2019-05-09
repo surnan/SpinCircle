@@ -19,7 +19,7 @@ class OpeningController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupNavigationMenu()
-    
+        
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         mySemiCircle.addGestureRecognizer(panGesture)
         
@@ -32,7 +32,7 @@ class OpeningController: UIViewController {
             mySemiCircle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             ])
     }
-
+    
     
     var finalVelocity = 0
     var currentlyPan = false
@@ -73,22 +73,11 @@ class OpeningController: UIViewController {
     func spin(){
         let divisionConst = 25000
         let newLimit: Float = Float(finalVelocity) / Float(divisionConst)
-        UIView.animate(withDuration: Double(newLimit),
-                       delay: 0,
-                       usingSpringWithDamping: 1.0,
-                       initialSpringVelocity: 0,
-                       options: .curveEaseOut,
-                       animations: {
-                        if self.mySemiCircle.layer.animation(forKey: self.kRotationAnimationKey) == nil {
-                            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
-                            rotationAnimation.fromValue = 0.0
-                            rotationAnimation.toValue = Float(Float.pi * newLimit)
-                            self.mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
-                        }
-        },
-                       completion: { (_) in
-                        print("Animation Ended")
-        })
+        
+        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotationAnimation.fromValue = 0.0
+        rotationAnimation.toValue = Float(Float.pi * newLimit)
+        self.mySemiCircle.layer.add(rotationAnimation, forKey: self.kRotationAnimationKey)
     }
     
     @objc func handleSpin(){
